@@ -1,8 +1,12 @@
 package com.task1
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.task1.dynamicview.DynamicPoint
+import com.task1.pubsub.MessageEvent
+import com.task1.pubsub.PubSub
+import com.task1.pubsub.SensorEvent
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -10,7 +14,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
+        //Task 1
         val pointList = ArrayList<DynamicPoint>()
 
         pointList.add(DynamicPoint(18.81799f,35.7445f,12f))
@@ -66,5 +70,20 @@ class MainActivity : AppCompatActivity() {
 
         dynamicView.loadPoints(pointList)
 //        dynamicView.requestLayout()
+
+
+        //Task 2 PuSub
+
+        val pubSub = PubSub()
+
+        val messageObserver = pubSub.toObservable(MessageEvent::class.java)
+
+        messageObserver.subscribe {
+            Log.i("test", "msg = ${it.message}")
+        }
+
+        pubSub.send(SensorEvent(12f))
+        pubSub.send(MessageEvent("No Data"))
+
     }
 }
